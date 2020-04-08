@@ -75,13 +75,13 @@ window.angular && (function(angular) {
 			var mousePosition = getMousePos(window.event); ///Get mouse position
 			lab.style.position = "absolute";
 			lab.style.display="block";
-			//lab.style.left = mousePosition.x  + 'px';
-			//lab.style.top = mousePosition.y  + 'px';	
-			lab.style.left = frontImgRect.left +(frontImgRect.right - frontImgRect.left)/2 + 'px';
-			lab.style.top = frontImgRect.top+70+ 'px';
+			lab.style.left = mousePosition.x + 5 + 'px';
+			lab.style.top = mousePosition.y + 5 + 'px';
+			//lab.style.left = frontImgRect.left +(frontImgRect.right - frontImgRect.left)/2 + 'px';
+			//lab.style.top = frontImgRect.top+70+ 'px';
 			console.log(mousePosition);
-			console.log(frontImgRect.left);
-			console.log(frontImgRect.bottom);
+			//console.log(frontImgRect.left);
+			//console.log(frontImgRect.bottom);
         }
       });
     };
