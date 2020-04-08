@@ -41,7 +41,8 @@ window.angular && (function(angular) {
               $scope.$emit('user-logged-in', {});
               var next = $location.search().next;
               if (next === undefined || next == null) {
-                $window.location.hash = '#/overview/server';
+                //$window.location.hash = '#/overview/server';
+				$window.location.hash = '#/usi_extend/server-control/ssdarray';
               } else {
                 $window.location.href = next;
               }

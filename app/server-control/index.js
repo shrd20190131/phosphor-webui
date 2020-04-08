@@ -37,12 +37,12 @@ window.angular && (function(angular) {
                 'controller': 'powerUsageController',
                 authenticated: true
               })
-              .when('/server-control/ssdarray', {
+              /* .when('/server-control/ssdarray', {
                 'template':
                     require('../usi_extend/server-control/controllers/ssdarray-controller.html'),
                 'controller': 'ssdArrayController',
                 authenticated: true
-              })
+              }) */
               .when('/server-control/remote-console', {
                 'template':
                     require('./controllers/remote-console-controller.html'),

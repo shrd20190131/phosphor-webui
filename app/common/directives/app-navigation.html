@@ -1,5 +1,13 @@
 <nav class="nav__wrapper">
   <ul id="nav__top-level" ng-style="navStyle">
+	
+	<li>
+      <a class="btn-ssdarray" ng-class="{opened: firstLevel == 'ssdarray'}" href="#/usi_extend/server-control/ssdarray" ng-click="change('ssdarray')">
+        <icon class="nav-icon" file="icon-ssdarray.svg"></icon>
+        SSD array
+      </a>
+    </li>
+	
     <li>
       <a class="btn-overview" ng-class="{opened: firstLevel == 'overview'}" href="#/overview/server" ng-click="change('overview')">
         <icon class="nav-icon" file="icon-overview.svg"></icon>
@@ -54,11 +62,11 @@
         <li ng-class="{'active': (path == '/server-control/server-led')}">
           <a href="#/server-control/server-led" ng-click="closeSubnav()"
             tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">Server LED</a>
-        </li>-->
+        </li>
         <li ng-class="{'active': (path == '/server-control/ssdarray')}">
           <a href="#/server-control/ssdarray" ng-click="closeSubnav()"
             tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">JBOF inventory</a>
-        </li>
+        </li>-->
         <li ng-class="{'active': (path == '/server-control/server-led')}">
           <a href="#/server-control/server-led" ng-click="closeSubnav()"
             tabindex="{{(showSubMenu && firstLevel == 'server-control') ? 0 : -1}}">JBOF LED</a>

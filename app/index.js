@@ -99,6 +99,7 @@ import usi_api_utils from './usi_extend/common/services/usi-api-utils.js';
 import switch_firmware_list from './usi_extend/common/directives/switch-firmware-list.js';
 import ssdarray_controller from './usi_extend/server-control/controllers/ssdarray-controller.js';
 import switch_firmware_controller from './usi_extend/configuration/controllers/switch-firmware-controller.js';
+import usi_extend_server_control_index from './usi_extend/server-control/index.js';
 
 import users_index from './users/index.js';
 import user_accounts_controller from './users/controllers/user-accounts-controller.js';
@@ -118,7 +119,7 @@ window.angular && (function(angular) {
             'app.common.services', 'app.common.directives',
             'app.common.filters',
             // Model resources
-            'app.login', 'app.overview', 'app.serverControl',
+            'app.login', 'app.usiExtend.serverControl', 'app.overview', 'app.serverControl',
             'app.serverHealth', 'app.configuration', 'app.users', 'app.redfish'
           ])
       // Route configuration
@@ -186,7 +187,8 @@ window.angular && (function(angular) {
                 if (current && current.$$route) {
                   $location.path(current.$$route.originalPath);
                 } else {
-                  $location.path('/overview/server');
+                  //$location.path('/overview/server');
+				  $location.path('/usi_extend/server-control/ssdarray');
                 }
               }
             }

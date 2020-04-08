@@ -15,103 +15,229 @@ window.angular && (function(angular) {
     'use strict';
 
     angular.module('app.serverControl').controller('ssdArrayController', [
-    '$scope', '$window', 'UsiAPIUtils', 'dataService', 'toastService', 'tooltip',
-    function($scope, $window, UsiAPIUtils, dataService, toastService) {
+    '$scope', '$window', 'UsiAPIUtils', 'APIUtils', 'dataService', 'toastService',
+    function($scope, $window, UsiAPIUtils, APIUtils, dataService, toastService) {
       $scope.loading = false;
 
-      $scope.changeStatus = function(flag){
+	  function changeStatus(flag){
           $scope.ssdFlag = false;
-          $scope.cableinfoFlag = false;
-          $scope.swinfoFlag = false;
-          $scope.dspFlag = false;
-          $scope.patopoFlag = false;
-          $scope.bindinfoFlag = false;
+          $scope.cableFlag = false;
+          $scope.switchFlag = false;
           $scope.psFlag = false;
+		  $scope.psxFlag = false;
+		  $scope.fanFlag = false;
           if(flag == 'ssd'){
               $scope.ssdFlag = true;
           }else if(flag == 'cable'){
-              $scope.cableinfoFlag = true;
-          }else if(flag == 'swinfo'){
-              $scope.swinfoFlag = true;
-          }else if(flag == 'dsp'){
-              $scope.dspFlag = true;
-          }else if(flag == 'patopo'){
-              $scope.patopoFlag = true;
-          }else if(flag == 'bind'){
-              $scope.bindinfoFlag = true;
+              $scope.cableFlag = true;
+          }else if(flag == 'sw'){
+              $scope.switchFlag = true;
           }else if(flag == 'ps'){
               $scope.psFlag = true;
+          }else if(flag == 'psx'){
+              $scope.psxFlag = true;
+          }else if(flag == 'fan'){
+              $scope.fanFlag = true;
           }
       };
-
+	  
       var arrayInfo=[];
-      var psinfo=[];
-      strSSDinfo = "<table id='ssdinfo' width='100%' border='1' cellpadding='0' cellspacing='0'>"+
-				"<tr><td colspan='3'><b>SSD Information</b></td></tr>"+
-				"<tr><td><b>SSD NO.</b></td><td><b></b></td></tr>"+
-				"<tr><td><b>type:</b></td><td><b></b></td></tr>"+
-				"<tr><td><b>slot address:</b></td><td><b></b></td></tr>"+
-				"<tr><td><b>status:</b></td><td><b></b></td></tr>"+
-				"<tr><td><b>link speed:</b></td><td><b></b></td></tr>"+
-				"<tr><td><b>link width:</b></td><td><b></b></td></tr>"+
-				"<tr><td><b>configure width:</b></td><td><b></b></td></tr>"+
-				"<tr><td><b>link up status:</b></td><td><b></b></td></tr>"+
-				"<tr><td><b>inserted:</b></td><td><b></b></td></tr>"+
-				"<tr><td><b>partition id:</b></td><td><b></b></td></tr></table>";
-
-      $scope.ssdNumSelected = function(num){
-        console.log(num);
-        console.log(arrayInfo);
+      var PSInfo=[];
+	  $scope.leave = function(id){
+		  $scope.ssdFlag = false;
+          $scope.cableFlag = false;
+          $scope.switchFlag = false;
+          $scope.psFlag = false;
+		  $scope.psxFlag = false;
+		  $scope.fanFlag = false;
+	      var lab = document.getElementById(id);
+		  console.log('leave');
+		  console.log(lab);
+		  lab.style.display = "none";
+	  };
+	  
+	  ///ssd information
+      $scope.SSD = function(num){
       angular.forEach(arrayInfo['Ssdinfo'], function(ssdInfo, ssdNum){
         console.log(ssdInfo);
         console.log(ssdNum);
         if(angular.equals(ssdNum, num)){
             console.log('equal');
-            $scope.ssdNO = num;
-            $scope.ssdDetailInfo = ssdInfo;
-            console.log($scope.ssdNO);
-            console.log($scope.ssdDetailInfo);
+			$scope.ssdNo=ssdNum;
+			$scope.ssdx=ssdInfo;
+			changeStatus('ssd');
 			
-			var tableid = "ssdinfo";
-			var pid = "#span";
-			for(var i=1; i < 25; i++){
-				$(pid+i).tooltip({title:strSSDinfo, html:true, placement:"middle", ableShow:true});
-				$(pid+i).on("shown.bs.tooltip", function() {
-					document.getElementById(tableid).rows[0].cells[1].innerHTML = ssdNum;
-					document.getElementById(tableid).rows[1].cells[1].innerHTML = ssdInfo.Type;
-					document.getElementById(tableid).rows[2].cells[1].innerHTML = ssdInfo.SlotAddr;
-					document.getElementById(tableid).rows[3].cells[1].innerHTML = ssdInfo.Status;
-					document.getElementById(tableid).rows[4].cells[1].innerHTML = ssdInfo.LinkSpeed;
-					document.getElementById(tableid).rows[5].cells[1].innerHTML = ssdInfo.LinkWidth;
-					document.getElementById(tableid).rows[6].cells[1].innerHTML = ssdInfo.ConfigureWidth;
-					document.getElementById(tableid).rows[7].cells[1].innerHTML = ssdInfo.LinkStatus;
-					document.getElementById(tableid).rows[8].cells[1].innerHTML = ssdInfo.Inserted;
-					document.getElementById(tableid).rows[9].cells[1].innerHTML = ssdInfo.PartitionID;
-				}
-			}
+			var frontImg = document.getElementById('front-img');
+			var frontImgRect = frontImg.getBoundingClientRect();
+			
+			var lab = document.getElementById('usi-ssd');
+			//var windowEvent = window.event;               ///Get windowEvent
+			var mousePosition = getMousePos(window.event); ///Get mouse position
+			lab.style.position = "absolute";
+			lab.style.display="block";
+			//lab.style.left = mousePosition.x  + 'px';
+			//lab.style.top = mousePosition.y  + 'px';	
+			lab.style.left = frontImgRect.left +(frontImgRect.right - frontImgRect.left)/2 + 'px';
+			lab.style.top = frontImgRect.top+70+ 'px';
+			console.log(mousePosition);
+			console.log(frontImgRect.left);
+			console.log(frontImgRect.bottom);
+        }
       });
     };
 
-    $scope.PowerSupply = function(name) {
-        angular.forEach(psinfo['Status'], function(psInfo, psx) {
-            console.log(psInfo);
-            console.log(psx);
-            if(angular.equals(name, psx)){
-                console.log('equale');
-                $scope.psName = name;
-                $scope.psDetailInfo = psInfo;
-                console.log($scope.psName);
-                console.log($scope.psDetailInfo);
-        }
-        });
-    }
+	///ps information
+    $scope.PowerSupply = function(name) {		
+		
+		if(angular.equals(name, 'PS')) {
+			changeStatus('ps');	
+			var lab=document.getElementById('usi-ps');
+			var mousePosition = getMousePos(window.event); ///Get mouse position
+			//var insideImg = document.getElementById('inside-img');
+			//var insideImgRect = insideImg.getBoundingClientRect();
+			lab.style.position = "absolute";
+			lab.style.display="block";
+			lab.style.left = mousePosition.x-150 + 'px';
+			lab.style.top = mousePosition.y-50 + 'px';
+			//lab.style.left = insideImgRect.left + 470 + 'px';
+			//lab.style.top = insideImgRect.top + 390 + 'px';
+			$scope.psinfo=PSInfo['Status'];
+			console.log(lab);
+			console.log($scope.psinfo);
+		}else{
+			angular.forEach(PSInfo['Status'], function(psInfo, psName) {
+				changeStatus('psx');	
+				var lab=document.getElementById('usi-psx');
+				var rearImg = document.getElementById('rear-img');
+				var rearImgRect = rearImg.getBoundingClientRect();
+				var mousePosition = getMousePos(window.event); ///Get mouse position
+				lab.style.position = "absolute";
+				lab.style.display= "block";
+				//lab.style.left = mousePosition.x + 'px';
+				//lab.style.top = mousePosition.y + 'px';
+				lab.style.left = rearImgRect.left-100 + 'px'; ///ok
+				//lab.style.top = rearImgRect.top+190 + 'px';
+				lab.style.top = rearImgRect.top+250 + 'px';
+				console.log(lab);
+				if(angular.equals(psName, name)) {
+					$scope.psname=psName;
+					$scope.psinfo=psInfo;
+					console.log($scope.psinfo);
+				}
+			});
+		}
+    };
 
+	///cable information
+	$scope.Cable = function(name) {
+		changeStatus('cable');
+		console.log(name);
+        console.log(arrayInfo);
+		$scope.cableinfo=arrayInfo['Cableinfo'];
+		var lab=document.getElementById('usi-cable');
+		//var mousePosition = getMousePos(window.event); ///Get mouse position
+		
+		var rearImg = document.getElementById('rear-img');
+		var rearImgRect = rearImg.getBoundingClientRect();
+		lab.style.position = "absolute";
+		lab.style.display="block";
+		//lab.style.left = mousePosition.x + 'px';
+		//lab.style.top = mousePosition.y + 'px';
+		lab.style.left = rearImgRect.left+100+ 'px';
+		lab.style.top = rearImgRect.top+50+ 'px';
+		console.log(mousePosition.x + 'px');
+		console.log(mousePosition.y + 'px');
+		console.log(lab); 
+	};
+	
+	///switch information
+	$scope.Switch = function(name) {
+		changeStatus('sw');
+		$scope.swinfo = arrayInfo['Swinfo'];
+		var lab = document.getElementById('usi-switch');
+		var mousePosition = getMousePos(window.event); ///Get mouse position
+		lab.style.position = "absolute";
+		lab.style.display = "block";		
+		lab.style.left = mousePosition.x - 350 + 'px';
+		lab.style.top = mousePosition.y - 150 + 'px';
+		console.log("Switch"); 
+		console.log(mousePosition.x + 'px');
+		console.log(mousePosition.y + 'px');
+		//console.log(lab); 
+	};
+	
+	
+	  	///fan sensor information
+	$scope.Fan = function(name) {
+		changeStatus('fan');
+		console.log(name);
+		console.log(fanData);
+		
+		var lab=document.getElementById('usi-fan');
+		//var windowEvent = window.event;               ///Get windowEvent
+		var mousePosition = getMousePos(window.event); ///Get mouse position
+		lab.style.position = "absolute";
+		lab.style.display="block";
+		lab.style.left = mousePosition.x-250 + 'px';
+		lab.style.top = mousePosition.y + 'px'; 
+		console.log("Fan");
+
+		for(var i = 0; i < fanData.length; i++){
+			if(fanData[i].title.indexOf(name+' INLET') != -1) {
+				$scope.faninfoIN=fanData[i];
+				console.log($scope.faninfoIN);
+			}else if(fanData[i].title.indexOf(name+' OUTLET') != -1){
+				$scope.faninfoOUT=fanData[i];
+				console.log($scope.faninfoOUT);
+			}
+		}
+	  };
+	
+	  ///arrow loop
+	  var index = 0;
+      var imgElement = document.getElementById("imgs").getElementsByTagName("li");
+	  console.log(imgElement);
+      var imgLen = imgElement.length;
+      $scope.moveNext = function(arrow){
+		  if(arrow == 'right'){
+			index++;
+			if (index == imgLen){
+				index = 0; // The first image
+			}
+			angular.element(imgElement).eq(index-1).addClass('img_display');
+			angular.element(imgElement).eq(index).removeClass('img_display');
+		  }else if(arrow == 'left'){
+			index--;
+			if (index == -1){
+				index = imgLen - 1; // The last image
+			}
+			if (index == 2){
+				angular.element(imgElement).eq(0).addClass('img_display');
+			}else{
+				angular.element(imgElement).eq(index+1).addClass('img_display');
+			}
+			angular.element(imgElement).eq(index).removeClass('img_display');
+		  }
+	  };
+
+	   
+	  // Get mouse relative position
+      function getMousePos(event) {
+          var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+          var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+		  //var x = event.pageX || event.clientX + scrollX;
+		  //var y = event.pageY || event.clientY + scrollY;
+		  var x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		  var y = event.clientY+ document.body.scrollTop + document.documentElement.scrollTop;
+		  return { 'x': x, 'y': y };
+      }
+	
+	
       $scope.loadSsdInfo = function(){
         UsiAPIUtils.getSsdArrayInfo().then(
             function(data){
                 arrayInfo = data;
-                /* if (arrayInfo.hasOwnProperty('Ssdinfo')){
-                    $scope.ssdinfo = arrayInfo['Ssdinfo'];
+                /*   $scope.ssdinfo = arrayInfo['Ssdinfo'];
                 }
                 if (arrayInfo.hasOwnProperty('Cableinfo')){
                     $scope.cableinfo = arrayInfo['Cableinfo'];
@@ -134,23 +260,40 @@ window.angular && (function(angular) {
             }
         );
       };
+	  
       // Get power supply info
       $scope.loadPowerSupplyInfo = function(){
         UsiAPIUtils.getPowerSupplyInfo().then(
             function(data){
-                psinfo = data;
-                if (psinfo.hasOwnProperty('Status')){
+                PSInfo = data;
+                /* if (psinfo.hasOwnProperty('Status')){
                     $scope.psinfo = psinfo['Status'];
-                }
+                } */
             },
             function(error) {
                toastService.error('Error during get PowerSupplyInfo');
             }
         );
       };
+	  
+	  
+      var fanData = [];
+	  $scope.loadFanSensorData = function(){
+          APIUtils.getAllSensorStatus(function(data, originalData) {
+              for(var i = 0; i < data.length; i++){
+                  if(data[i].title.indexOf('Fan') != -1 &&  data[i].title.indexOf('Tach') != -1){
+                      fanData.push(data[i]);
+					  //console.log(data[i]);
+					  //console.log(data[i].title);
+                  }
+              }
+              
+         });
+	  };
 
       $scope.loadSsdInfo();
       $scope.loadPowerSupplyInfo();
+	  $scope.loadFanSensorData();
     }
   ]);
 })(angular);
